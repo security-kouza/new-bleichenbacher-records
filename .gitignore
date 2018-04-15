@@ -1,0 +1,44 @@
+fig/cite
+# executables
+test_fft
+test_gmp
+attack
+attack_sd
+attack_mpi
+siggen_mpi
+
+# Python
+.ipynb_checkpoints/
+__pycache__/
+.project
+.pydevproject
+
+# C/C++
+*.o
+*.a
+*.bin
+include/
+lib/
+
+# Eclipse
+.settings/
+
+# tex
+*.aux
+*.dvi
+*.log
+*.toc
+*.blg
+*.bbl
+*.glo
+*.glg
+*.gls
+*.out
+*.xdy
+*.xbb
+*.snm
+*.nav
+*.synctex.gz
+*~
+*#
+*.pdf
