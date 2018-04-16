@@ -18,7 +18,7 @@ sudo apt install numactl hwloc libhwloc-dev libnuma1 libnuma-dev
   4. `./b2 install` to build and install Boost.MPI
 
 ### qDSA
-- The qDSA source codes under `qDSA/Curve25519-asm` directory are taken from one of the authors' [website](https://www.cs.ru.nl/~jrenes/)
+- The qDSA source codes under `qDSA/Curve25519-asm` are based on the qDSA reference implementation (J. Renes) and Ed25519 (D.J.Bernstein et al.)
 
 ## Build
 Run `make all` at the project root to create 3 executables: `test_fft`, `attack_mpi`, `siggen_mpi`.
