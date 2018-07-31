@@ -20,6 +20,13 @@ mpz_class keygen(
         unsigned char *pk,
         unsigned char *sk
         );
+int sign_fault(
+		SignatureSimple& sig,
+        unsigned char *sm, unsigned long long *smlen,
+        const unsigned char *m, unsigned long long mlen,
+        const unsigned char *pk, const unsigned char *sk,
+        mpz_class n, sc25519 *lim, uint32_t leak
+        );
 int sign(
 		SignatureSimple& sig,
         unsigned char *sm, unsigned long long *smlen,

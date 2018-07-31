@@ -7,6 +7,7 @@ extern "C" {
 #include "qDSA/Curve25519-asm/scalar.h"
 
 }
+#include <vector>
 
 struct Domain {
 	uint32_t secpar;

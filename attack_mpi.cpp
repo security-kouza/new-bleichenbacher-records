@@ -1,5 +1,8 @@
 //============================================================================
 // Name        : attack_mpi.cpp
+// Author      : Akira Takahashi and Mehdi Tibouchi
+// Version     : 0.1
+// Copyright   : Public domain
 // Description : Parallelized Bleichenbacher's attack
 // Standard    : C++11
 //============================================================================
@@ -95,7 +98,7 @@ int main(int argc, char** argv) {
 
     /* Set parameters */
     if (vm.count("test")) {
-        /* Use Schnorr signatures */
+        /* Use signature data from input file */
         secpar = 90;
         n = (mpz_class(1) << secpar) - 33;
         a = 12;
@@ -125,22 +128,29 @@ int main(int argc, char** argv) {
         secpar = 252;
         n = (mpz_class(1) << 252) + mpz_class("27742317777372353535851937790883648493");
         /* parameters for 3-bit bias */
-        
+        /*
         a = 21;
         filter = 0;
         iota = 4;
         ofst_info = {2,2,1,0};
-        
+         */
         /* parameters for 2-bit bias */
         /*
         a = 24;
         filter = 19;
         iota = 3;
         ofst_info = {2,1,0};
-        */
+        
         l = a+2;
-        //b = (double)(secpar-filter-kb-l)/iota;
-        b = 3*a-1.6;
+        b = (double)(secpar-filter-kb-l)/iota;
+        */
+        /* parameters for reduction experiments: test252_a15_b0_f0 */
+        a = 15;
+        filter = 0;
+        iota = 5;
+        ofst_info = {2,2,1,0,0};
+        l = a+2;
+        b = 3*a -1.59;
         pp = mock::setup(secpar, n);
         d = mpz_class("5220582922658643192668885191618908575833980181104027493552863441828733052420");
     }
@@ -212,14 +222,13 @@ int main(int argc, char** argv) {
         printf("average noise = %lf\n"
                "estimated noise 1/sqrt(L) = %lf\n", noise, 1/sqrt(L));
 
-	std::string bias_fname("bias.csv");
-	printf("saving bias to file %s\n", bias_fname.c_str());
-	std::ofstream bias_file(bias_fname.c_str(), std::ofstream::trunc);
-	for(uint32_t i=0; i<L; i++) {
-	    bias_file << i << "," << W[i] << std::endl;
-	}
-	bias_file.close();
-
+		std::string bias_fname("bias.csv");
+		printf("saving bias to file %s\n", bias_fname.c_str());
+		std::ofstream bias_file(bias_fname.c_str(), std::ofstream::trunc);
+		for(uint32_t i=0; i<L; i++) {
+			bias_file << i << "," << W[i] << std::endl;
+		}
+		bias_file.close();
 
         std::string dbin = d.get_str(2);
         std::string ebin = estim.get_str(2);

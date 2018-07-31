@@ -1,7 +1,11 @@
-/*
- * siggen_qdsa.cpp
- *
- */
+//============================================================================
+// Name        : siggen_mpi.cpp
+// Author      : Akira Takahashi and Mehdi Tibouchi
+// Version     : 0.1
+// Copyright   : Public domain
+// Description : Faulty qDSA signature generator
+// Standard    : C++11
+//============================================================================
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +42,7 @@ int main(int argc, char** argv) {
         ("verbose", "verbose logging")
         ("test", "generate test signatures")
         ("out", po::value<std::string>(), "save signature data to a file with specified prefix")
+		("leak", po::value<int>(), "number of nonce LSBs to be leaked")
         ("filter", po::value<int>(), "number of bits filtered")
     ;
 
@@ -67,6 +72,11 @@ int main(int argc, char** argv) {
     mpz_class d;
     std::vector<SignatureSimple> subresult;
 
+    if (vm.count("leak"))
+        leak = vm["leak"].as<int>();
+    else
+        leak = 0;
+
     if (vm.count("filter"))
         filter = vm["filter"].as<int>();
     else
@@ -78,7 +88,6 @@ int main(int argc, char** argv) {
         n = (mpz_class(1) << secpar) - 33;
         tmplim = n >> filter;
         a = 12;
-        leak = 2;
         S = 1<<(a+2);
         pp = mock::setup(secpar, n);
         d = mpz_class("924408261565060156037890712");
@@ -112,7 +121,6 @@ int main(int argc, char** argv) {
         tmplim = n >> filter;
         mpz_to_gs(lim, tmplim);
         a = 24;
-        leak = 2;
         S = 1 << (a+2);
         pp = mock::setup(secpar, n);
         const unsigned long long mlen = sizeof(uint64_t) + sizeof(int); // should be > (a+2+filter)/8
@@ -126,6 +134,10 @@ int main(int argc, char** argv) {
         const float percent_delta = 100.0/log_prec;
         size_t log_th = 0;
         float percent = 0;
+        if (leak!=0 && leak!=2 && leak!=3) {
+        	printf("%u-bit leak is not supported\n", leak);
+        	return 1;
+        }
 
         /* KeyGen */
         uint8_t pk[32];
@@ -152,11 +164,11 @@ int main(int argc, char** argv) {
 		};
         unsigned char sm[64+mlen]; // +-R || s || m
         unsigned long long smlen;
-	
+
         mstruct.rank = world.rank();
         while (subresult.size() < S_sub) {
             numsigs++;
-            /* generate random message */
+            /* set message */
             mstruct.index = numsigs;
 #if 0
 			if(numsigs==17) {
@@ -168,7 +180,11 @@ int main(int argc, char** argv) {
 
             /* sign */
             SignatureSimple sig;
-            if (qdsa::sign(sig, sm, &smlen, m, mlen, pk, sk, pp.n, &lim) != 1) continue;
+            if (leak==0) {
+            	qdsa::sign(sig, sm, &smlen, m, mlen, pk, sk, pp.n, &lim);
+            } else {
+            	if (qdsa::sign_fault(sig, sm, &smlen, m, mlen, pk, sk, pp.n, &lim, leak) != 1) continue;
+            }
             subresult.emplace_back(sig);
             if (subresult.size() >= log_th) {
                 printf("[%d]/[%d]: %.2f %% done\n", world.rank(), world.size(), percent);

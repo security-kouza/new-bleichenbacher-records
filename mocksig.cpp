@@ -1,5 +1,8 @@
 //============================================================================
 // Name        : mocksig.cpp
+// Author      : Akira Takahashi and Mehdi Tibouchi
+// Version     : 0.1
+// Copyright   : Public domain
 // Description : Mock Schnorr signature generator and various utilities
 // Standard    : C++11
 //============================================================================

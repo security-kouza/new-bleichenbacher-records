@@ -1,6 +1,9 @@
 //============================================================================
 // Name        : reduction.cpp
-// Description : Reduction phase in Bleichenbacher's attack
+// Author      : Akira Takahashi and Mehdi Tibouchi
+// Version     : 0.1
+// Copyright   : Public domain
+// Description : Reduction algorithms in Bleichenbacher's attack
 // Standard    : C++11
 //============================================================================
 

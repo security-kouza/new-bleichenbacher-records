@@ -98,6 +98,7 @@ void ladder_base(ecp *r, const group_scalar *n)
     ladder(r, &base, &basex, n);
 }
 
+/* BEGIN: MODIFIED BY AUTHORS */
 void ladder_fault(ecp *r, const group_scalar *n)
 {
     ecp base;
@@ -109,6 +110,7 @@ void ladder_fault(ecp *r, const group_scalar *n)
 
     ladder(r, &base, &basex, n);
 }
+/* END: MODIFIED BY AUTHORS */
 
 void bValues(fe25519 *bZZ, fe25519 *bXZ, fe25519 *bXX, 
         const ecp *xp, const ecp *xq)

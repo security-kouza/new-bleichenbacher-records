@@ -10,6 +10,7 @@ sudo apt-get update && sudo apt-get install libfftw3-3 libfftw3-bin libfftw3-dev
 sudo apt install numactl hwloc libhwloc-dev libnuma1 libnuma-dev
 ```
   2. Follow the instruction [here](https://www.open-mpi.org/faq/?category=building#easy-build)
+  3. `sudo ldconfig`
 
 ### Boost
   1. Download the source [here](https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz) and unpack it
@@ -18,7 +19,7 @@ sudo apt install numactl hwloc libhwloc-dev libnuma1 libnuma-dev
   4. `./b2 install` to build and install Boost.MPI
 
 ### qDSA
-- The qDSA source codes under `qDSA/Curve25519-asm` are based on the qDSA reference implementation (J. Renes) and Ed25519 (D.J.Bernstein et al.)
+The qDSA source code under `qDSA/Curve25519-asm` is based on the [qDSA reference implementation](https://www.cs.ru.nl/~jrenes/software/cref-g1.tar.gz) (J. Renes) and [Ed25519](http://ed25519.cr.yp.to/software.html) (D.J.Bernstein et al.)
 
 ## Build
 Run `make all` at the project root to create 3 executables: `test_fft`, `attack_mpi`, `siggen_mpi`.
@@ -35,7 +36,14 @@ LD_LIBRARY_PATH=./lib mpirun -np <number-of-cores> attack_mpi <options>
 
 ### `siggen_mpi`
 - `--out <filename>`: save generated signature to a file
+- `--leak <num_of_bits>`: number of nonce LSBs to be leaked
 - `--filter <num_of_bits>`: filter signatures by the values of h
+
+#### Example
+- Generate 2-bit biased  preprocessed qDSA signatures with the top 19-bit filtered
+```
+./siggen_mpi --leak 2 --filter 19 --out qdsa_a24_b2_f19
+```
 
 ### `attack_mpi`
 - `--in <file_prefix>`: load signature data and execute an attack
@@ -44,11 +52,24 @@ LD_LIBRARY_PATH=./lib mpirun -np <number-of-cores> attack_mpi <options>
 - `--red`: perform reduction
 - `--fft`: perform key recevoery
 
+#### Example
+- Quick test using pseudo-Schnorr signature over 90-bit group
+``` 
+OMP_NUM_THREADS=1 mpirun -np 1 -x OMP_NUM_THREADS -map-by ppr:1:core --report-bindings --display-map ./attack_mpi --in data/test90_a12_b2_f10 --test --red --fft
+```
+
+- 5-round reduction test
+```
+OMP_NUM_THREADS=1 mpirun -np 1 -x OMP_NUM_THREADS -map-by ppr:1:core --report-bindings --display-map ./attack_mpi --in data/test252_a15_b0_f0 --red
+```
+
 ### MPI options
 - `--bind-to`
 - `--rank-by`
 - `--map-by`
 - `-x ENV_VAR_TO_PASS`
+
+#### For debugging
 - `--display-map`
 - `--display-allocation`
 - `--report-bindings`
@@ -65,4 +86,3 @@ LD_LIBRARY_PATH=./lib mpirun -np <number-of-cores> attack_mpi <options>
 - [FAQ: Building Open MPI](https://www.open-mpi.org/faq/?category=building)
 - [FAQ: General run-time tuning](https://www.open-mpi.org/faq/?category=tuning)
 - [libgomp environment variables](https://gcc.gnu.org/onlinedocs/libgomp/Environment-Variables.html#Environment-Variables)
-

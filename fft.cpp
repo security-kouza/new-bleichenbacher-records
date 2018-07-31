@@ -1,5 +1,8 @@
 //============================================================================
 // Name        : fft.cpp
+// Author      : Akira Takahashi and Mehdi Tibouchi
+// Version     : 0.1
+// Copyright   : Public domain
 // Description : Bias Computation with FFT
 // Standard    : C++11
 //============================================================================
