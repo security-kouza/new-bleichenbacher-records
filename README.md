@@ -1,7 +1,7 @@
 # New Bleichenbacher Records: Parallel Implementation
 This repository includes the parallel implementation of Bleichenbacher's attack, described in the following research paper:
 
-__Akira Takahashi, Mehdi Tibouchi, and Masayuki Abe, "New Bleichenbacher Records: Fault Attacks on qDSA Signatures", IACR Transactions on Cryptographic Hardware and Embedded Systems (TCHES), Volume 2018, Issue 3. to appear.__ [eprint](https://eprint.iacr.org/2018/396)
+_Akira Takahashi, Mehdi Tibouchi, and Masayuki Abe, "New Bleichenbacher Records: Fault Attacks on qDSA Signatures", IACR Transactions on Cryptographic Hardware and Embedded Systems (TCHES), Volume 2018, Issue 3. to appear._ [eprint](https://eprint.iacr.org/2018/396)
 
 ## Dependencies
 ### FFTW & GMP
