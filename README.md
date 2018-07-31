@@ -1,3 +1,8 @@
+# New Bleichenbacher Records: Parallel Implementation
+This repository includes the parallel implementation of Bleichenbacher's attack, described in the following research paper:
+
+__Akira Takahashi, Mehdi Tibouchi, and Masayuki Abe, "New Bleichenbacher Records: Fault Attacks on qDSA Signatures", IACR Transactions on Cryptographic Hardware and Embedded Systems (TCHES), Volume 2018, Issue 3. to appear.__ [eprint](https://eprint.iacr.org/2018/396)
+
 ## Dependencies
 ### FFTW & GMP
 ```
@@ -19,7 +24,11 @@ sudo apt install numactl hwloc libhwloc-dev libnuma1 libnuma-dev
   4. `./b2 install` to build and install Boost.MPI
 
 ### qDSA
-The qDSA source code under `qDSA/Curve25519-asm` is based on the [qDSA reference implementation](https://www.cs.ru.nl/~jrenes/software/cref-g1.tar.gz) (J. Renes) and [Ed25519](http://ed25519.cr.yp.to/software.html) (D.J.Bernstein et al.)
+The qDSA source code under `qDSA/Curve25519-asm` is based on the [qDSA reference implementation](https://www.cs.ru.nl/~jrenes/software/cref-g1.tar.gz) (J. Renes).
+We modified it using the assembly language implementation of [Ed25519](http://ed25519.cr.yp.to/software.html) (D.J.Bernstein et al.)
+from SUPERCOP v20171218 under the directory `crypto_sign/ed25519/amd64-64-24k`.
+
+Both software is in the public domain.
 
 ## Build
 Run `make all` at the project root to create 3 executables: `test_fft`, `attack_mpi`, `siggen_mpi`.
